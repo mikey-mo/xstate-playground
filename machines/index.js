@@ -37,7 +37,7 @@ export const monsterMachine = createMachine({
     startSpin: ({ degree }) => {
       const interval = setInterval(() => {
         assign({ degree: degree + 10 })
-      }, 500);
+      }, 1000);
       return () => clearInterval(interval);
     },
   },
