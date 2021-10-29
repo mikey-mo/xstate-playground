@@ -69,3 +69,5 @@ export const activateMachine = createMachine({
     return payload;
   }}),
 }});
+
+export const VIEW_STATES = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' };

@@ -6,7 +6,7 @@ import MonsterActivate from '../common/MonsterActivate';
 import MonsterChoice from '../common/MonsterChoice';
 import Monster from '../common/Monster';
 
-import { activateMachine } from '../machines';
+import { activateMachine, VIEW_STATES } from '../machines';
 
 const getCurrentState = state => state.value;
 const getCurrentMonster = state => state.context.monster;
@@ -27,8 +27,8 @@ const Index = ({ monsters }) => {
   return (
     <main style={{ padding: 20, textAlign: 'center' }}>
       <h1>{`Monster is currently: ${childSpinState}`}</h1>
-      <MonsterActivate send={activeService.send} active={stateValue === 'active'} />
-      {stateValue === 'active' && (
+      <MonsterActivate send={activeService.send} active={stateValue === VIEW_STATES.ACTIVE} />
+      {stateValue === VIEW_STATES.ACTIVE && (
         <>
           {currentMonster && <MonsterChoice monsterId={currentMonster.id} onSelect={selectMonster} />}
           {currentMonster.url && <Monster machine={monsterRef} monsterUrl={currentMonster.url} />}
