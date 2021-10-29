@@ -2,9 +2,9 @@
 import { useInterpret, useSelector } from '@xstate/react';
 import monsters from '../data/monsters.json';
 
-import MonsterActivate from '../common/MonsterActivate';
-import MonsterChoice from '../common/MonsterChoice';
-import Monster from '../common/Monster';
+import MonsterActivate from '../modules/MonsterActivate';
+import MonsterChoice from '../modules/MonsterChoice';
+import Monster from '../modules/Monster';
 
 import { activateMachine, VIEW_STATES } from '../machines';
 

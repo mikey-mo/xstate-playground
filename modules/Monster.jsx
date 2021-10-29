@@ -10,8 +10,8 @@ const Monster = ({ machine, monsterUrl }) => {
   const cutThatOut = () => send('CUT_THAT_OUT');
 
   return (
-    <section style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', width: 300, justifyContent: 'center', alignItems: 'center' }}>
+    <section style={{ marginTop: 10, width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ borderRadius: 10, backgroundColor: 'teal', display: 'flex', flexDirection: 'column', padding: 40, width: 500, justifyContent: 'center', alignItems: 'center' }}>
         <h1>{'Spin Em'}</h1>
         <img style={style} alt="spooky" src={monsterUrl} />
         <button style={buttonStyle} onClick={state.value === 'idle' ? spinAway : cutThatOut}>

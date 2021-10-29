@@ -64,10 +64,7 @@ export const activateMachine = createMachine({
 }, { actions: {
   spawnMonsterMachine: assign({ monsterRef: () => spawn(monsterMachine, { sync: true, name: 'monster' }) }),
   toggleMonster: assign({ showMonster: ({ showMonster }) => !showMonster }),
-  pickMonster: assign({ monster: (_, { payload }) => {
-    console.log('PAYLOAD', payload);
-    return payload;
-  }}),
+  pickMonster: assign({ monster: (_, { payload }) => payload }),
 }});
 
 export const VIEW_STATES = { ACTIVE: 'active', INACTIVE: 'inactive' };
