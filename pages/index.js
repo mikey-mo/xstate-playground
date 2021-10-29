@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useMachine } from '@xstate/react';
+import { useInterpret, useMachine, useSelector } from '@xstate/react';
 import monsters from '../data/monsters.json';
 
 import MonsterActivate from '../common/MonsterActivate';
@@ -8,15 +8,30 @@ import Monster from '../common/Monster';
 
 import { activateMachine } from '../machines';
 
+const getCurrentState = state => state.value;
+const getCurrentMonster = state => state.context.monster;
+const getMonsterRef = state => state.context.monsterRef;
+const getMonsters = state => state.context.monsters;
+const getChildSpinState = state => state.context.monsterRef.state.value;
+
 const Index = ({ monsters }) => {
-  const [state, send] = useMachine(activateMachine.withContext({ ...activateMachine.context, monsters }), { name: 'main', devTools: true });
+  const activeService = useInterpret(activateMachine.withContext({ ...activateMachine.context, monsters }), { name: 'main', devTools: true });
+  const stateValue = useSelector(activeService, getCurrentState);
+  const currentMonster = useSelector(activeService, getCurrentMonster);
+  const monsterRef = useSelector(activeService, getMonsterRef);
+  const monsterChoices = useSelector(activeService, getMonsters);
+  const childSpinState = useSelector(activeService, getChildSpinState);
+
+  const selectMonster = monsterId => activeService.send({ type: 'PICK_MONSTER', payload: { monster: monsterChoices[monsterId] } });
+
   return (
-    <main style={{ padding: 20 }}>
-      <MonsterActivate send={send} active={state.value === 'active'} />
-      {state.value === 'active' && (
+    <main style={{ padding: 20, textAlign: 'center' }}>
+      <h1>{`Monster is currently: ${childSpinState}`}</h1>
+      <MonsterActivate send={activeService.send} active={stateValue === 'active'} />
+      {stateValue === 'active' && (
         <>
-          <MonsterChoice onSelect={(monsterId) => send({ type: 'PICK_BOI', payload: { monsterUrl: state.context.monsters[monsterId] } })} />
-          {state.context.monsterUrl && <Monster machine={state.context.monsterRef} monsterUrl={state.context.monsterUrl} />}
+          <MonsterChoice active={currentMonster} onSelect={selectMonster} />
+          {currentMonster && <Monster machine={monsterRef} monster={currentMonster} />}
         </>
       )}
     </main>
