@@ -70,4 +70,4 @@ export const activateMachine = createMachine({
   }}),
 }});
 
-export const VIEW_STATES = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' };
+export const VIEW_STATES = { ACTIVE: 'active', INACTIVE: 'inactive' };
