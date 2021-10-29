@@ -50,7 +50,7 @@ export const activateMachine = createMachine({
   context: {
     showMonster: false,
     monsterRef: null,
-    monster: null,
+    monster: { id: null, url: null },
     monsters: null,
   },
   states: {
@@ -64,5 +64,8 @@ export const activateMachine = createMachine({
 }, { actions: {
   spawnMonsterMachine: assign({ monsterRef: () => spawn(monsterMachine, { sync: true, name: 'monster' }) }),
   toggleMonster: assign({ showMonster: ({ showMonster }) => !showMonster }),
-  pickMonster: assign({ monster: (_, { payload: { monster } }) => monster }),
+  pickMonster: assign({ monster: (_, { payload }) => {
+    console.log('PAYLOAD', payload);
+    return payload;
+  }}),
 }});

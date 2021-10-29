@@ -3,7 +3,7 @@ const buttonStyle = { cursor: 'pointer', marginBottom: 10, borderRadius: 4, widt
 const MonsterActivate = ({ send, active }) => (
   <section style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
     <div style={{ display: 'flex', flexDirection: 'column', width: 300, justifyContent: 'center', alignItems: 'center' }}>
-      <h1>{'Activate Em'}</h1>
+      <h1>{`${active ? 'Deactivate' : 'Activate'} Em`}</h1>
       <button style={buttonStyle} disabled={active} onClick={() => send('TOGGLE')}>
         {'Activate'}
       </button>
