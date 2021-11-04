@@ -1,5 +1,40 @@
 import { createMachine, assign, spawn } from 'xstate';
 
+export const routeMachine = createMachine({
+  id: 'route',
+  context: {
+    transfer: {
+      linkId: null,
+      recipientName: null,
+    },
+  },
+  meta: {
+    failureRedirect: '/fail',
+  },
+  initial: 'idle',
+  states: {
+    idle: {
+      always: [
+        {
+          target: 'success', cond: () => false,
+        },
+        {
+          target: 'failure', cond: () => true,
+        },
+      ],
+    },
+    failure: {
+      entry: 'failure',
+      type: 'final',
+    },
+    secondFailure: {
+      entry: 'secondFailure',
+      type: 'final',
+    },
+    success: { type: 'final' },
+  }
+});
+
 export const monsterMachine = createMachine({
   id: 'monster',
   context: { degree: 0 },

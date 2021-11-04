@@ -5,6 +5,7 @@ import monsters from '../data/monsters.json';
 import MonsterActivate from '../modules/MonsterActivate';
 import MonsterChoice from '../modules/MonsterChoice';
 import Monster from '../modules/Monster';
+import Link from '../modules/Link';
 
 import { activateMachine, VIEW_STATES } from '../machines';
 
@@ -32,6 +33,7 @@ const Index = ({ monsters }) => {
         <>
           {currentMonster && <MonsterChoice monsterId={currentMonster.id} onSelect={selectMonster} />}
           {currentMonster.url && <Monster machine={monsterRef} monsterUrl={currentMonster.url} />}
+          <Link />
         </>
       )}
     </main>
