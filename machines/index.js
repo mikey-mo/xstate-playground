@@ -8,28 +8,37 @@ export const routeMachine = createMachine({
       recipientName: null,
     },
   },
-  meta: {
-    failureRedirect: '/fail',
-  },
   initial: 'idle',
   states: {
     idle: {
+      tags: ['loading'],
       always: [
         {
-          target: 'success', cond: () => false,
+          target: 'success', cond: () => Math.random() * 100 > 5,
         },
         {
-          target: 'failure', cond: () => true,
+          target: 'noAuth', cond: () => Math.random() * 100 > 5,
         },
+        {
+          target: 'limitFail', cond: () => true,
+        }
       ],
     },
-    failure: {
+    noAuth: {
       entry: 'failure',
       type: 'final',
+      meta: {
+        redirectPath: '/invalid-auth',
+        redirectMethod: 'push',
+      }
     },
-    secondFailure: {
-      entry: 'secondFailure',
+    limitFail: {
+      entry: 'failure',
       type: 'final',
+      meta: {
+        redirectPath: '/limit-fail',
+        redirectMethod: 'replace',
+      }
     },
     success: { type: 'final' },
   }
