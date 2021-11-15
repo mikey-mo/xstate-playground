@@ -1,4 +1,6 @@
-import { createMachine, assign, spawn } from 'xstate';
+import { createMachine, assign, spawn, sendUpdate } from 'xstate';
+
+const randomize = () => Math.random() * 100 > 5;
 
 export const routeMachine = createMachine({
   id: 'route',
@@ -14,10 +16,10 @@ export const routeMachine = createMachine({
       tags: ['loading'],
       always: [
         {
-          target: 'success', cond: () => Math.random() * 100 > 5,
+          target: 'success', cond: randomize(),
         },
         {
-          target: 'noAuth', cond: () => Math.random() * 100 > 5,
+          target: 'noAuth', cond: randomize(),
         },
         {
           target: 'limitFail', cond: () => true,
@@ -51,11 +53,11 @@ export const monsterMachine = createMachine({
   states: {
     idle: {
       on: {
-        SPIN_AWAY: 'spinning',
+        SPIN_AWAY: { target: 'spinning', actions: sendUpdate() },
       },
     },
     spinning: {
-      always: { target: 'idle', cond: ({ degree }) => degree >= 360, actions: 'clearSpin' },
+      always: { target: 'idle', cond: ({ degree }) => degree >= 360, actions: ['clearSpin', sendUpdate()] },
       invoke: {
         src: () => send => {
           const spinInterval = setInterval(() => send('UPDATE_DEGREE'), 1000);
@@ -63,7 +65,7 @@ export const monsterMachine = createMachine({
         }
       },
       on: {
-        CUT_THAT_OUT: { target: 'idle', actions: 'clearSpin' },
+        CUT_THAT_OUT: { target: 'idle', actions: ['clearSpin', sendUpdate()] },
         UPDATE_DEGREE: { actions: 'updateDegree' },
       },
     },
@@ -106,7 +108,7 @@ export const activateMachine = createMachine({
     }
   },
 }, { actions: {
-  spawnMonsterMachine: assign({ monsterRef: () => spawn(monsterMachine, { sync: true, name: 'monster' }) }),
+  spawnMonsterMachine: assign({ monsterRef: () => spawn(monsterMachine, { name: 'monster' }) }),
   toggleMonster: assign({ showMonster: ({ showMonster }) => !showMonster }),
   pickMonster: assign({ monster: (_, { payload }) => payload }),
 }});

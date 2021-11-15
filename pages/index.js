@@ -13,7 +13,7 @@ const getCurrentState = state => state.value;
 const getCurrentMonster = state => state.context.monster;
 const getMonsterRef = state => state.context.monsterRef;
 const getMonsters = state => state.context.monsters;
-const getChildSpinState = state => state.context.monsterRef.state.value;
+const getChildSpinState = state => state.context.monsterRef.getSnapshot().state.value;
 
 const Index = ({ monsters }) => {
   const activeService = useInterpret(activateMachine.withContext({ ...activateMachine.context, monsters }), { name: 'main', devTools: true });
