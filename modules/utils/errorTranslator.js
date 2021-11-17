@@ -1,7 +1,8 @@
 const errorTranslator = (errors) => {
-  console.log(errors);
-
-  return 'error here';
+  if (errors.input) {
+    return 'Input Error';
+  }
+  return 'Output Error';
 };
 
 export default errorTranslator;

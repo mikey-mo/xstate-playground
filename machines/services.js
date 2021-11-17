@@ -8,7 +8,7 @@ export const ERRORS = [
 export const wildcardFetch = async () => new Promise((resolve, reject) => {
   if (Math.ceil(Math.random() * 10) > 5) {
     const err = new Error();
-    const { status, message } = ERRORS[Math.ceil(Math.random() * ERRORS.length)];
+    const { status, message } = ERRORS[Math.floor(Math.random() * ERRORS.length)];
     err.status = status;
     err.message = message;
     reject(err);

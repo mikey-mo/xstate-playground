@@ -56,7 +56,7 @@ export const monsterMachine = createMachine({
     idle: {
       entry: sendUpdate(),
       on: {
-        SPIN_AWAY: { target: 'fetchWildcard' },
+        SPIN_AWAY: { target: 'fetchWildcard', actions: assign({ errors: {} }) },
       },
     },
     fetchWildcard: {
