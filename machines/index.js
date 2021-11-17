@@ -1,5 +1,7 @@
 import { createMachine, assign, spawn, sendUpdate } from 'xstate';
 
+import { wildcardFetch, ERRORS } from './services';
+
 const randomize = () => Math.random() * 100 > 5;
 
 export const routeMachine = createMachine({
@@ -48,15 +50,45 @@ export const routeMachine = createMachine({
 
 export const monsterMachine = createMachine({
   id: 'monster',
-  context: { degree: 0 },
+  context: { degree: 0, errors: {} },
   initial: 'idle',
   states: {
     idle: {
+      entry: sendUpdate(),
       on: {
-        SPIN_AWAY: { target: 'spinning', actions: sendUpdate() },
+        SPIN_AWAY: { target: 'fetchWildcard' },
       },
     },
+    fetchWildcard: {
+      invoke: {
+        id: 'fetch-wildcard',
+        src: 'wildcardFetch',
+        onDone: 'spinning',
+        onError: [
+          { target: 'idle', cond: (_, { data: { status } }) => status === 400 },
+          { target: 'error' },
+        ],
+      }
+    },
+    error: {
+      entry: assign({
+        errors: (_, { data: { status } }) => {
+          switch (status) {
+          case ERRORS[0].status:
+            return { input: ERRORS[0].status };
+          case ERRORS[1].status:
+            return { input: ERRORS[1].status };
+          case ERRORS[2].status:
+            return { output: ERRORS[2].status };
+          case ERRORS[3].status:
+            return { output: ERRORS[3].status };
+          }
+        },
+      }),
+      always: [{ target: 'idle' }],
+    },
     spinning: {
+      entry: sendUpdate(),
       always: { target: 'idle', cond: ({ degree }) => degree >= 360, actions: ['clearSpin', sendUpdate()] },
       invoke: {
         src: () => send => {
@@ -87,6 +119,7 @@ export const monsterMachine = createMachine({
       return () => clearInterval(interval);
     },
   },
+  services: { wildcardFetch },
 });
 
 export const activateMachine = createMachine({
