@@ -1,3 +1,5 @@
+import randomize from "./utils/randomize";
+
 export const ERRORS = [
   { status: 400, message: 'bad request' },
   { status: 401, message: 'unauthorized' },
@@ -6,7 +8,7 @@ export const ERRORS = [
 ];
 
 export const wildcardFetch = async () => new Promise((resolve, reject) => {
-  if (Math.ceil(Math.random() * 10) > 5) {
+  if (Math.ceil(randomize())) {
     const err = new Error();
     const { status, message } = ERRORS[Math.floor(Math.random() * ERRORS.length)];
     err.status = status;

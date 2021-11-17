@@ -1,8 +1,7 @@
 import { createMachine, assign, spawn, sendUpdate } from 'xstate';
 
+import randomize from './utils/randomize';
 import { wildcardFetch, ERRORS } from './services';
-
-const randomize = () => Math.random() * 100 > 5;
 
 export const routeMachine = createMachine({
   id: 'route',
@@ -18,13 +17,13 @@ export const routeMachine = createMachine({
       tags: ['loading'],
       always: [
         {
-          target: 'success', cond: randomize(),
+          target: 'success', cond: randomize,
         },
         {
-          target: 'noAuth', cond: randomize(),
+          target: 'noAuth', cond: randomize,
         },
         {
-          target: 'limitFail', cond: () => true,
+          target: 'limitFail',
         }
       ],
     },
